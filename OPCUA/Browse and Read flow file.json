@@ -1,1 +1,1770 @@
 
+[
+    {
+        "id": "73fb2362.79124c",
+        "type": "tab",
+        "label": "BrowseFlow",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "8a3b0353.1e62a",
+        "type": "tab",
+        "label": "ReadFlow",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6272f68abc7344be",
+        "type": "serial-port",
+        "serialport": "/dev/tty.Bluetooth-Incoming-Port",
+        "serialbaud": "57600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "3e847cd2.95aca4",
+        "type": "OpcUa-Endpoint",
+        "endpoint": "opc.tcp://localhost:48010\r",
+        "secpol": "None",
+        "secmode": "None",
+        "login": false
+    },
+    {
+        "id": "80e4a358.d2186",
+        "type": "OpcUa-Endpoint",
+        "z": "8a3b0353.1e62a",
+        "endpoint": "opc.tcp://localhost:48010\r",
+        "login": false
+    },
+    {
+        "id": "bf78ed7.4eeac1",
+        "type": "inject",
+        "z": "73fb2362.79124c",
+        "name": "InjectBrowseFlow",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 110,
+        "y": 60,
+        "wires": [
+            [
+                "e403d1c4.ce394"
+            ]
+        ]
+    },
+    {
+        "id": "dad42b0.fafe7d8",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 750,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "e403d1c4.ce394",
+        "type": "OpcUa-Browser",
+        "z": "73fb2362.79124c",
+        "endpoint": "3e847cd2.95aca4",
+        "item": "",
+        "datatype": "",
+        "topic": "ns=0;i=85/0",
+        "items": [],
+        "x": 310,
+        "y": 60,
+        "wires": [
+            [
+                "d7c1b07d.06ee1",
+                "e59fdd25.7c6b9"
+            ]
+        ]
+    },
+    {
+        "id": "d7c1b07d.06ee1",
+        "type": "function",
+        "z": "73fb2362.79124c",
+        "name": "rotea node",
+        "func": "let item = {};\nlet isItemSet  = false;\nif(msg.payload.length > 0){\n    msg.payload.forEach((itemsObj)=>{\n        if(itemsObj.item.browseName.name === 'Rotea') {\n            item = itemsObj;\n            isItemSet = true;\n        }\n    });\n}\n\nif(isItemSet){\n    global.set('RoteaObj', item);\n}\n\nlet itemVal = isItemSet ? item : global.get('RoteaObj');\nnode.send({payload: {actiontype:'browse', root: itemVal}});\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 510,
+        "y": 60,
+        "wires": [
+            [
+                "233b1c22.cf8d74",
+                "dad42b0.fafe7d8"
+            ]
+        ]
+    },
+    {
+        "id": "233b1c22.cf8d74",
+        "type": "OpcUa-Browser",
+        "z": "73fb2362.79124c",
+        "endpoint": "3e847cd2.95aca4",
+        "item": "",
+        "datatype": "",
+        "topic": "ns=0;i=85/0",
+        "items": [],
+        "x": 510,
+        "y": 140,
+        "wires": [
+            [
+                "beaa4392.616c7",
+                "ac0380ae.22e65",
+                "8dfa1127.f95e",
+                "e6350c25.b97f"
+            ]
+        ]
+    },
+    {
+        "id": "e6350c25.b97f",
+        "type": "function",
+        "z": "73fb2362.79124c",
+        "name": "rotea node",
+        "func": "let item = {};\nlet isItemSet  = false;\nif(msg.payload.length > 0){\n    msg.payload.forEach((itemsObj)=>{\n        if(itemsObj.item.browseName.name === 'InstrumentInfo') {\n            item = itemsObj;\n            isItemSet = true;\n        }\n    });\n}\n\nif(isItemSet){\n    global.set('InstrumentInfoObj', item);\n}\n\nlet itemVal = isItemSet ? item : global.get('InstrumentInfoObj');\nnode.send({payload: {actiontype:'browse', root: itemVal}});\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 220,
+        "wires": [
+            [
+                "c0d4360f.e76098",
+                "213543c9.552d9c"
+            ]
+        ]
+    },
+    {
+        "id": "213543c9.552d9c",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 730,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c0d4360f.e76098",
+        "type": "OpcUa-Browser",
+        "z": "73fb2362.79124c",
+        "endpoint": "3e847cd2.95aca4",
+        "item": "",
+        "datatype": "",
+        "topic": "ns=0;i=85/0",
+        "items": [],
+        "x": 510,
+        "y": 280,
+        "wires": [
+            [
+                "63cea904.fb8958",
+                "8489ca4f.a17fd8"
+            ]
+        ]
+    },
+    {
+        "id": "63cea904.fb8958",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 730,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "8489ca4f.a17fd8",
+        "type": "function",
+        "z": "73fb2362.79124c",
+        "name": "rotea node",
+        "func": "let payload = {\n    serialNumber: '' || global.get('serialNumber'),\n    instrumentName : '' || global.get('instrumentName'), \n    modelNumber: '' || global.get('modelNumber'),\n    RoteaLinkUp: '' || global.get('RoteaLinkUp')\n};\nif(msg.payload.length > 0){\n    msg.payload.forEach((itemsObj)=>{\n        if(itemsObj.item.browseName.name === 'SerialNumber') {\n            payload.serialNumber = itemsObj.item.nodeId;\n            global.set('serialNumber', payload.serialNumber);\n        }\n        if(itemsObj.item.browseName.name === 'InstrumentName') {\n            payload.instrumentName = itemsObj.item.nodeId;\n            global.set('instrumentName', payload.instrumentName);\n        }\n        if(itemsObj.item.browseName.name === 'ModelNumber') {\n            payload.modelNumber = itemsObj.item.nodeId;\n            global.set('modelNumber', payload.modelNumber);\n        }\n        if(itemsObj.item.browseName.name === 'RoteaLinkUp') {\n            payload.RoteaLinkUp = itemsObj.item.nodeId;\n            global.set('RoteaLinkUp', payload.RoteaLinkUp);\n        }\n    });\n}\n\nreturn {\"payload\": payload};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 360,
+        "wires": [
+            [
+                "740db327.213a1c",
+                "fd885425.f11f28",
+                "11aa1270.b1e1ce"
+            ]
+        ]
+    },
+    {
+        "id": "740db327.213a1c",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 730,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "e59fdd25.7c6b9",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 270,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "fd885425.f11f28",
+        "type": "change",
+        "z": "73fb2362.79124c",
+        "name": "Store Instrument node Ids",
+        "rules": [
+            {
+                "t": "set",
+                "p": "instrumentNodeIds",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 770,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "adecf59a.468a58",
+        "type": "http in",
+        "z": "73fb2362.79124c",
+        "name": "readInstrumentInfo",
+        "url": "/readInstrumentInfo",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 620,
+        "wires": [
+            [
+                "49e6d633.bad848"
+            ]
+        ]
+    },
+    {
+        "id": "49e6d633.bad848",
+        "type": "change",
+        "z": "73fb2362.79124c",
+        "name": "Copy instrument node ids",
+        "rules": [
+            {
+                "t": "set",
+                "p": "instrumentNodeIds",
+                "pt": "msg",
+                "to": "instrumentNodeIds",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "protocolStateNodeIds",
+                "pt": "msg",
+                "to": "protocolStateNodeIds",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 620,
+        "wires": [
+            [
+                "dc2ef8a9.487688"
+            ]
+        ]
+    },
+    {
+        "id": "dc2ef8a9.487688",
+        "type": "template",
+        "z": "73fb2362.79124c",
+        "name": "page",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "{\n    \"serialNumber\" :\"{{instrumentNodeIds.serialNumber}}\",\n    \"modelNumber\" :\"{{instrumentNodeIds.modelNumber}}\",\n    \"instrumentName\" :\"{{instrumentNodeIds.instrumentName}}\",\n    \"protocolState\" :\"{{protocolStateNodeIds.ProtocolState}}\",\n    \"protocolName\" :\"{{protocolStateNodeIds.ProtocolName}}\",\n    \"protocolStepNumber\" :\"{{protocolStateNodeIds.ProtocolStepNumber}}\",\n    \"protocolEnded\" : \"{{protocolStateNodeIds.ProtocolEnded}}\",\n    \"roteaLinkUp\" :\"{{instrumentNodeIds.RoteaLinkUp}}\",\n    \"waitingUserAck\" :\"{{protocolStateNodeIds.WaitingUserAck}}\",\n    \"kitState\" :\"{{protocolStateNodeIds.KitState}}\",\n    \"doorState\" :\"{{protocolStateNodeIds.DoorState}}\",\n    \"kitId\" :\"{{protocolStateNodeIds.KitId}}\"\n\n    \n}",
+        "output": "str",
+        "x": 490,
+        "y": 620,
+        "wires": [
+            [
+                "7dba70f6.f407b"
+            ]
+        ]
+    },
+    {
+        "id": "2bcdbcf.10c9e44",
+        "type": "http response",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 780,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "7dba70f6.f407b",
+        "type": "change",
+        "z": "73fb2362.79124c",
+        "name": "Set Headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "headers.content-type",
+                "pt": "msg",
+                "to": "application/json",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 620,
+        "wires": [
+            [
+                "2bcdbcf.10c9e44"
+            ]
+        ]
+    },
+    {
+        "id": "beaa4392.616c7",
+        "type": "change",
+        "z": "73fb2362.79124c",
+        "name": "Store Rotea nodeIds",
+        "rules": [
+            {
+                "t": "set",
+                "p": "roteaNodeIds",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "33d72bf9.ede9a4",
+        "type": "OpcUa-Browser",
+        "z": "73fb2362.79124c",
+        "endpoint": "3e847cd2.95aca4",
+        "item": "",
+        "datatype": "",
+        "topic": "ns=0;i=85/0",
+        "items": [],
+        "x": 530,
+        "y": 420,
+        "wires": [
+            [
+                "355ebebe.6bc3f2",
+                "7267be46.5828d"
+            ]
+        ]
+    },
+    {
+        "id": "48d8c730.d9b0b8",
+        "type": "function",
+        "z": "73fb2362.79124c",
+        "name": "rotea node",
+        "func": "let item = {};\nlet isItemSet = false;\nif(msg.roteaNodeIds.length > 0){\n    msg.roteaNodeIds.forEach((itemsObj)=>{\n        if(itemsObj.item.browseName.name === 'ProtocolState') {\n            item = itemsObj;\n            isItemSet = true;\n        }\n    });\n}\n\nlet protocolObj = isItemSet ? item : global.get('protocolStateObj');\nnode.send({payload: {actiontype:'browse', root: protocolObj}});\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 420,
+        "wires": [
+            [
+                "33d72bf9.ede9a4"
+            ]
+        ]
+    },
+    {
+        "id": "11aa1270.b1e1ce",
+        "type": "change",
+        "z": "73fb2362.79124c",
+        "name": "Copy Rotea node ids",
+        "rules": [
+            {
+                "t": "set",
+                "p": "roteaNodeIds",
+                "pt": "msg",
+                "to": "roteaNodeIds",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 140,
+        "y": 420,
+        "wires": [
+            [
+                "48d8c730.d9b0b8"
+            ]
+        ]
+    },
+    {
+        "id": "9e34f2f6.1acd4",
+        "type": "change",
+        "z": "73fb2362.79124c",
+        "name": "Store protocol state node Ids",
+        "rules": [
+            {
+                "t": "set",
+                "p": "protocolStateNodeIds",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 780,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "355ebebe.6bc3f2",
+        "type": "function",
+        "z": "73fb2362.79124c",
+        "name": "rotea node",
+        "func": "var payload = {\n    ProtocolState: '' || global.get('ProtocolState'), \n    ProtocolName : '' || global.get('ProtocolName'), \n    ProtocolStepNumber: '' || global.get('ProtocolStepNumber'),\n    ProtocolEnded: 'ns=2;i=6078' || global.get('ProtocolEnded'),\n    WaitingUserAck: '' || global.get('WatingUserAck'),\n    KitState: '' || global.get('KitState'),\n    DoorState: '' || global.get('DoorState'),\n    KitId: '' || global.get('KitId')\n};\nif(msg.payload.length > 0){\n    msg.payload.forEach((itemsObj)=>{\n        if(itemsObj.item.browseName.name === 'ProtocolState') {\n            payload.ProtocolState = itemsObj.item.nodeId;\n            global.set('ProtocolState', payload.ProtocolState);\n        }\n        if(itemsObj.item.browseName.name === 'ProtocolName') {\n            payload.ProtocolName = itemsObj.item.nodeId;\n            global.set('ProtocolName', payload.ProtocolName);\n        }\n        if(itemsObj.item.browseName.name === 'ProtocolStepNumber') {\n            payload.ProtocolStepNumber = itemsObj.item.nodeId;\n            global.set('ProtocolStepNumber', payload.ProtocolStepNumber);\n        }\n        if(itemsObj.item.browseName.name === 'ProtocolEnded') {\n            payload.ProtocolEnded = itemsObj.item.nodeId ? itemsObj.item.nodeId : 'ns=2;i=6078';\n            global.set('ProtocolEnded', payload.ProtocolEnded);\n        }\n        if(itemsObj.item.browseName.name === 'WatingUserAck' || itemsObj.item.browseName.name === 'WaitingUserAck') {\n            payload.WaitingUserAck = itemsObj.item.nodeId;\n            global.set('WatingUserAck', payload.WaitingUserAck);\n        }\n        if(itemsObj.item.browseName.name === 'KitState') {\n            payload.KitState = itemsObj.item.nodeId;\n            global.set('KitState', payload.KitState);\n        }\n        if(itemsObj.item.browseName.name === 'DoorState') {\n            payload.DoorState = itemsObj.item.nodeId;\n            global.set('DoorState', payload.DoorState);\n        }\n        if(itemsObj.item.browseName.name === 'KitId') {\n            payload.KitId = itemsObj.item.nodeId;\n            global.set('KitId', payload.KitId);\n        }\n    });\n}\n\nreturn {\"payload\": payload};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 510,
+        "y": 500,
+        "wires": [
+            [
+                "9e34f2f6.1acd4",
+                "3d48cf08.f009f"
+            ]
+        ]
+    },
+    {
+        "id": "3d48cf08.f009f",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 650,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "7267be46.5828d",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 710,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "ac0380ae.22e65",
+        "type": "debug",
+        "z": "73fb2362.79124c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 830,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "8dfa1127.f95e",
+        "type": "function",
+        "z": "73fb2362.79124c",
+        "name": "protocolState Object - set global",
+        "func": "let item = {};\nlet isItemSet  = false;\nif(msg.payload.length > 0){\n    msg.payload.forEach((itemsObj)=>{\n        if(itemsObj.item.browseName.name === 'ProtocolState') {\n            item = itemsObj;\n            isItemSet = true;\n        }\n    });\n}\nif (isItemSet) {\nglobal.set('protocolStateObj', item);\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 210,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "94662af1.da1588",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6042",
+        "datatype": "String",
+        "value": "",
+        "name": "serialNumberItem",
+        "x": 310,
+        "y": 20,
+        "wires": [
+            [
+                "2d8ac0ce.a7047",
+                "e761b658.bcdb18"
+            ]
+        ]
+    },
+    {
+        "id": "76377e92.44fdb",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6043",
+        "datatype": "String",
+        "value": "",
+        "name": "modelNumberItem",
+        "x": 310,
+        "y": 60,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "99293ff.a12bec",
+        "type": "inject",
+        "z": "8a3b0353.1e62a",
+        "name": "Add item",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 80,
+        "y": 100,
+        "wires": [
+            [
+                "76377e92.44fdb",
+                "8d5cdf1c.5df1b",
+                "45d52264.b9493c",
+                "94662af1.da1588",
+                "2dc8b729.6f8218",
+                "2d4bd669.86acca",
+                "109f0750.c00aa9",
+                "13e2eb56.e0f905",
+                "9dbc13fa.8806e",
+                "86588a8f.c11df8",
+                "3d14173f.83ff48",
+                "d0275bea.d7d8f8",
+                "3e0dd38f.963d9c"
+            ]
+        ]
+    },
+    {
+        "id": "45d52264.b9493c",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6044",
+        "datatype": "String",
+        "value": "",
+        "name": "instrumentNameItem",
+        "x": 320,
+        "y": 100,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "cd422ad0.eaf178",
+        "type": "change",
+        "z": "8a3b0353.1e62a",
+        "name": "Set Headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "headers.content-type",
+                "pt": "msg",
+                "to": "application/json",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 690,
+        "y": 560,
+        "wires": [
+            [
+                "3c794744.6d8b28"
+            ]
+        ]
+    },
+    {
+        "id": "3c794744.6d8b28",
+        "type": "http response",
+        "z": "8a3b0353.1e62a",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 840,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "603a3bf2.1bcad4",
+        "type": "template",
+        "z": "8a3b0353.1e62a",
+        "name": "prepare payload",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "{\n    \"serialNumber\":\"{{serialNumber}}\",\n    \"modelNumber\":\"{{modelNumber}}\",\n    \"instrumentName\":\"{{instrumentName}}\"\n}",
+        "output": "str",
+        "x": 520,
+        "y": 560,
+        "wires": [
+            [
+                "cd422ad0.eaf178"
+            ]
+        ]
+    },
+    {
+        "id": "d7cd8756.993788",
+        "type": "change",
+        "z": "8a3b0353.1e62a",
+        "name": "get instrumentInfo",
+        "rules": [
+            {
+                "t": "set",
+                "p": "serialNumber",
+                "pt": "msg",
+                "to": "serialNumber",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "modelNumber",
+                "pt": "msg",
+                "to": "modelNumber",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "instrumentName",
+                "pt": "msg",
+                "to": "instrumentName",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 330,
+        "y": 560,
+        "wires": [
+            [
+                "603a3bf2.1bcad4"
+            ]
+        ]
+    },
+    {
+        "id": "7614429a.ac0d5c",
+        "type": "http in",
+        "z": "8a3b0353.1e62a",
+        "name": "getNowInstrumentInfoData",
+        "url": "/getNowInstrumentInfoData",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 560,
+        "wires": [
+            [
+                "d7cd8756.993788"
+            ]
+        ]
+    },
+    {
+        "id": "cdda2195.f8fe",
+        "type": "switch",
+        "z": "8a3b0353.1e62a",
+        "name": "mapResults",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "ns=2;i=6042",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6043",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6044",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6046",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6051",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6048",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6078",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6045",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6079",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6035",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6031",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ns=2;i=6034",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 12,
+        "x": 730,
+        "y": 140,
+        "wires": [
+            [
+                "5b441370.fa7dfc"
+            ],
+            [
+                "528b49f4.4ea618"
+            ],
+            [
+                "7e7aade.7d6bc54"
+            ],
+            [
+                "fb29f80b.bbcc58"
+            ],
+            [
+                "6db422.e01cabe"
+            ],
+            [
+                "604404a0.8c49bc"
+            ],
+            [
+                "4e5060db.2a468"
+            ],
+            [
+                "c6443d10.d264b"
+            ],
+            [
+                "c86f8b8c.7d75f8"
+            ],
+            [
+                "d1fad4cb.832c58"
+            ],
+            [
+                "548bbf04.efc31"
+            ],
+            [
+                "b0b0b3c2.75d77"
+            ]
+        ]
+    },
+    {
+        "id": "8d5cdf1c.5df1b",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6046",
+        "datatype": "String",
+        "value": "",
+        "name": "protocolNameItem",
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "2dc8b729.6f8218",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6048",
+        "datatype": "String",
+        "value": "",
+        "name": "protocolStepNumberItem",
+        "x": 330,
+        "y": 220,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "2d4bd669.86acca",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6078",
+        "datatype": "String",
+        "value": "",
+        "name": "protocolEndedItem",
+        "x": 310,
+        "y": 260,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "109f0750.c00aa9",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6045",
+        "datatype": "String",
+        "value": "",
+        "name": "roteaLinkUpItem",
+        "x": 300,
+        "y": 300,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "13e2eb56.e0f905",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6079",
+        "datatype": "String",
+        "value": "",
+        "name": "waitingUserAckItem",
+        "x": 320,
+        "y": 340,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "3d14173f.83ff48",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6051",
+        "datatype": "String",
+        "value": "",
+        "name": "protocolStateItem",
+        "x": 310,
+        "y": 140,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "c45348e6.ca00f8",
+        "type": "debug",
+        "z": "8a3b0353.1e62a",
+        "name": "status API response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 2480,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "219d245.4fd09dc",
+        "type": "http request",
+        "z": "8a3b0353.1e62a",
+        "name": "Device Status Request",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "http://localhost:PORTNUMBER/api/v1/device-opcua/deviceStatus",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 2160,
+        "y": 140,
+        "wires": [
+            [
+                "c45348e6.ca00f8",
+                "8ba29c9b.46f52"
+            ]
+        ]
+    },
+    {
+        "id": "8f4d2ed2.de92f",
+        "type": "debug",
+        "z": "8a3b0353.1e62a",
+        "name": "status API request",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 2140,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "128e55ca.3df8ca",
+        "type": "debug",
+        "z": "8a3b0353.1e62a",
+        "name": "event API response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 2210,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "d00bb9d5.b8c1e8",
+        "type": "http request",
+        "z": "8a3b0353.1e62a",
+        "name": "Device Event Request",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "http://localhost:PORTNUMBER/api/v1/device-opcua/deviceEvent",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 1960,
+        "y": 440,
+        "wires": [
+            [
+                "128e55ca.3df8ca",
+                "a3ce9c32.515d8"
+            ]
+        ]
+    },
+    {
+        "id": "e6d60c3d.51e6a",
+        "type": "debug",
+        "z": "8a3b0353.1e62a",
+        "name": "event API request",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1780,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "4e5060db.2a468",
+        "type": "change",
+        "z": "8a3b0353.1e62a",
+        "name": "Store protocolEnded",
+        "rules": [
+            {
+                "t": "set",
+                "p": "protocolEnded",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 260,
+        "wires": [
+            [
+                "bc2a6904.811688",
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "c6443d10.d264b",
+        "type": "change",
+        "z": "8a3b0353.1e62a",
+        "name": "Store roteaLinkUp",
+        "rules": [
+            {
+                "t": "set",
+                "p": "roteaLinkUp",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1010,
+        "y": 300,
+        "wires": [
+            [
+                "20500ae.4af78f6",
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "c86f8b8c.7d75f8",
+        "type": "change",
+        "z": "8a3b0353.1e62a",
+        "name": "Store waitingUserAck",
+        "rules": [
+            {
+                "t": "set",
+                "p": "waitingUserAck",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 340,
+        "wires": [
+            [
+                "ac90bd80.7d748",
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "395a8c0d.768f54",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Build Payload",
+        "func": "let waitingUserAck = flow.get('waitingUserAck');\nlet roteaLinkUp = flow.get('roteaLinkUp');\nlet protocolEndedIndex = flow.get('protocolEnded');\nlet protocolEndedArr = ['NotApplicable', 'CompletedSuccessfully', 'UserStoppedRun', 'DoorUnlatchedError', 'PumpMotorError', 'CentrifugeMotorError','ValveError', 'OutOfBalanceError', 'MoistureInBowlError','OverPressureConditionError', 'UnknownError'];\nlet protocolEnded = protocolEndedArr[protocolEndedIndex];\nlet protocolEndedErrArr = ['DoorUnlatchedError', 'PumpMotorError', 'CentrifugeMotorError', 'ValveError', 'OutOfBalanceError', 'MoistureInBowlError', 'OverPressureConditionError'];\nlet protocolEndedErrCodeArr = ['Door lock error.', 'Pump error.', 'Centrifuge error.', 'Valve error.', 'Instrument out of balance.', 'Centrifuge leak detected.', 'Blockage detected.'];\nlet errorCode = '';\n\nif(!roteaLinkUp){\n    errorCode = 'Communication error.';\n} else {\n    if(flow.get('protocolState') === 5 || flow.get('protocolState') === '5') {\n        if(waitingUserAck === 1 || waitingUserAck === '1'){\n            errorCode = 'Bubble Detected';\n        } else if(waitingUserAck === 2 || waitingUserAck === '2'){\n            errorCode = 'Pressure Detected';\n        } else if(waitingUserAck === 0 || waitingUserAck === 3 || waitingUserAck === '0' || waitingUserAck === '3') {\n            errorCode = 'Paused by User';\n        }\n    } else {     \n        let index = protocolEndedErrArr.indexOf(protocolEnded);\n        if(index !== -1 ){\n            errorCode = protocolEndedErrCodeArr[index];\n        }\n    }\n}\n\nmsg = {};\nmsg.headers = 'Content-Type: application/json';\nmsg.payload = { \n  \"model\": flow.get('modelNumber'),\n  \"type\": \"ROTEA\",\n  \"protocalName\": flow.get(\"protocolName\"),\n  \"serialNumber\":  flow.get(\"serialNumber\"),\n  \"currentStepNumber\": flow.get('protocolStepNumber'),\n  \"roteaLinkUp\": flow.get('roteaLinkUp'),\n  \"doorState\": flow.get('doorState'),\n  \"kitSate\": flow.get('kitState'),\n  \"protocolState\": flow.get('protocolState'),\n  \"protocolEnded\": flow.get('protocolEnded'),\n  \"waitingUserAck\": flow.get('waitingUserAck'),\n  \"errorCode\":  errorCode || '',\n  \"kitId\": flow.get('kitId')\n};\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1500,
+        "y": 200,
+        "wires": [
+            [
+                "1c1cfc3e.f34434"
+            ]
+        ]
+    },
+    {
+        "id": "9dbc13fa.8806e",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6035",
+        "datatype": "String",
+        "value": "",
+        "name": "kitStateItem",
+        "x": 290,
+        "y": 380,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "86588a8f.c11df8",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6031",
+        "datatype": "String",
+        "value": "",
+        "name": "doorStateItem",
+        "x": 300,
+        "y": 420,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "d67ae364.c32f",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Build Payload",
+        "func": "let eventKey = msg.payload || '';\nflow.set('eventKey',eventKey);\nmsg = {};\n// msg.headers = 'Content-Type: application/json';\nmsg.payload = {\n\"model\": flow.get('modelNumber'),\n\"serialNumber\": flow.get('serialNumber'),\n\"deviceType\": 'ROTEA',\n\"deviceEventRecord\": {\n    \"timestamp\":new Date(),\n    \"eventKey\": eventKey\n }\n};\nif(eventKey){\n return msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1740,
+        "y": 440,
+        "wires": [
+            [
+                "e6d60c3d.51e6a",
+                "d00bb9d5.b8c1e8"
+            ]
+        ]
+    },
+    {
+        "id": "d0275bea.d7d8f8",
+        "type": "OpcUa-Item",
+        "z": "8a3b0353.1e62a",
+        "item": "ns=2;i=6034",
+        "datatype": "String",
+        "value": "",
+        "name": "kitIdItem",
+        "x": 280,
+        "y": 460,
+        "wires": [
+            [
+                "2d8ac0ce.a7047"
+            ]
+        ]
+    },
+    {
+        "id": "2d8ac0ce.a7047",
+        "type": "OpcUa-Client",
+        "z": "8a3b0353.1e62a",
+        "endpoint": "3e847cd2.95aca4",
+        "action": "subscribe",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": "1",
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "name": "client1",
+        "x": 570,
+        "y": 120,
+        "wires": [
+            [
+                "cdda2195.f8fe"
+            ]
+        ]
+    },
+    {
+        "id": "528b49f4.4ea618",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Store modelNumber",
+        "func": "if(msg.payload && msg.payload !== 'XXXX'){\n    flow.set('modelNumber', msg.payload);\n}\n\nflow.set('modelNumberValue', msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1020,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5b441370.fa7dfc",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Store serialNumber",
+        "func": "if(msg.payload && msg.payload !== 'XXXXXXXXX'){\n    flow.set('serialNumber', msg.payload);\n}\n flow.set('serialNumberValue', msg.payload);",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1010,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ac90bd80.7d748",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set event Key",
+        "func": "let waitingUserAck = flow.get('waitingUserAck');\nlet eventKey = '';\n\nif(waitingUserAck === 1){\n    eventKey = 'WAITING_BUBBLE_ACK';\n}\nif(waitingUserAck === 2){\n    eventKey = 'WAITING_PRESSURE_ACK';\n}\n\nif(eventKey){\n node.send({payload: eventKey});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1500,
+        "y": 520,
+        "wires": [
+            [
+                "d67ae364.c32f"
+            ]
+        ]
+    },
+    {
+        "id": "c87c9f3.6c7376",
+        "type": "http in",
+        "z": "8a3b0353.1e62a",
+        "name": "",
+        "url": "/isOpcuaConnected",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 620,
+        "wires": [
+            [
+                "e9c47b27.ae0c68"
+            ]
+        ]
+    },
+    {
+        "id": "e8c6171d.3a5328",
+        "type": "http response",
+        "z": "8a3b0353.1e62a",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 840,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "cae55236.23c95",
+        "type": "template",
+        "z": "8a3b0353.1e62a",
+        "name": "payload",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "{\n    \"serialNumber\":\"{{serialNumberValue}}\"\n}",
+        "output": "str",
+        "x": 540,
+        "y": 620,
+        "wires": [
+            [
+                "48d87dfc.3c0c44"
+            ]
+        ]
+    },
+    {
+        "id": "48d87dfc.3c0c44",
+        "type": "change",
+        "z": "8a3b0353.1e62a",
+        "name": "Set Headers",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "headers.content-type",
+                "pt": "msg",
+                "to": "application/json",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 690,
+        "y": 620,
+        "wires": [
+            [
+                "e8c6171d.3a5328"
+            ]
+        ]
+    },
+    {
+        "id": "e9c47b27.ae0c68",
+        "type": "change",
+        "z": "8a3b0353.1e62a",
+        "name": "get instrumentInfo",
+        "rules": [
+            {
+                "t": "set",
+                "p": "serialNumberValue",
+                "pt": "msg",
+                "to": "serialNumberValue",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "modelNumberValue",
+                "pt": "msg",
+                "to": "modelNumberValue",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "opcua_error",
+                "pt": "msg",
+                "to": "opcua_error",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 620,
+        "wires": [
+            [
+                "cae55236.23c95",
+                "53f472c2.4eecdc"
+            ]
+        ]
+    },
+    {
+        "id": "e761b658.bcdb18",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "",
+        "func": "flow.set('serialNumberValue', '');",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db95da67.ab7358",
+        "type": "inject",
+        "z": "8a3b0353.1e62a",
+        "name": "Add item",
+        "repeat": "15",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 100,
+        "y": 40,
+        "wires": [
+            [
+                "94662af1.da1588"
+            ]
+        ]
+    },
+    {
+        "id": "7e7aade.7d6bc54",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Store instrumentName",
+        "func": "if(msg.payload && msg.payload !== 'XXXXXXX'){\n    flow.set('instrumentName', msg.payload);\n    node.send({payload: msg.payload});\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1020,
+        "y": 100,
+        "wires": [
+            [
+                "d0806325.2c3f"
+            ]
+        ]
+    },
+    {
+        "id": "20500ae.4af78f6",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set event Key",
+        "func": "\nlet roteaLinkUp = flow.get('roteaLinkUp');\nlet eventKey = '';\n\nif(!roteaLinkUp){\n    eventKey = 'ROTEA_LINK_UP';\n}\n\nif(eventKey){\n node.send({payload: eventKey});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1500,
+        "y": 460,
+        "wires": [
+            [
+                "d67ae364.c32f"
+            ]
+        ]
+    },
+    {
+        "id": "bc2a6904.811688",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set event Key",
+        "func": "\nlet protocolEndedIndex = flow.get('protocolEnded');\nlet protocolEndedArr = ['NotApplicable', 'CompletedSuccessfully', 'UserStoppedRun', 'DoorUnlatchedError', 'PumpMotorError', 'CentrifugeMotorError','ValveError', 'OutOfBalanceError', 'MoistureInBowlError','OverPressureConditionError', 'UnknownError'];\nlet protocolEnded = protocolEndedArr[protocolEndedIndex];\nlet protocolEndedErrArr = ['DoorUnlatchedError', 'PumpMotorError', 'CentrifugeMotorError', 'ValveError', 'OutOfBalanceError', 'MoistureInBowlError', 'OverPressureConditionError'];\nlet protocolEndedErrEventKeyArr = ['DOOR_UNLATCH_ERROR', 'PUMP_MOTOR_ERROR', 'CENTRIFUGE_MOTOR_ERROR', 'VALVE_ERROR', 'OUT_OF_BALANCE_ERROR', 'MOISTURE_BOWL_ERROR', 'OVERPRESSURE_CONDITION_ERROR'];\nlet eventKey = '';\n\nlet index = protocolEndedErrArr.indexOf(protocolEnded);\nif(index !== -1 ){\n    eventKey = protocolEndedErrEventKeyArr[index];\n}\n\nif(eventKey){\n node.send({payload: eventKey});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1500,
+        "y": 400,
+        "wires": [
+            [
+                "d67ae364.c32f"
+            ]
+        ]
+    },
+    {
+        "id": "53f472c2.4eecdc",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "clear global",
+        "func": "if(!flow.get('serialNumberValue')) {\nglobal.set('protocolStateObj', '');\nglobal.set('InstrumentInfoObj', '');\nglobal.set('RoteaObj', '');\nglobal.set('serialNumber', '');\nglobal.set('instrumentName', '');\nglobal.set('modelNumber', '');\nglobal.set('RoteaLinkUp', '');\nglobal.set('ProtocolState', '');\nglobal.set('ProtocolName', '');\nglobal.set('ProtocolStepNumber', '');\nglobal.set('ProtocolEnded', '');\nglobal.set('WatingUserAck', '');\nglobal.set('KitState', '');\nglobal.set('DoorState', '');\nglobal.set('KitId', '');\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 610,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a3ce9c32.515d8",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Clear EventKey",
+        "func": "flow.set('eventKey','');",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2170,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e1dffcd6.60fc4",
+        "type": "debug",
+        "z": "8a3b0353.1e62a",
+        "name": "device name API response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1820,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "f9b1da81.48ae08",
+        "type": "http request",
+        "z": "8a3b0353.1e62a",
+        "name": "Update Device Name API",
+        "method": "PUT",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "http://localhost:PORTNUMBER/api/v1/tfc-device/device/name",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 1570,
+        "y": 80,
+        "wires": [
+            [
+                "e1dffcd6.60fc4"
+            ]
+        ]
+    },
+    {
+        "id": "bb4fc746.888a68",
+        "type": "debug",
+        "z": "8a3b0353.1e62a",
+        "name": "device name API request",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1440,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "d0806325.2c3f",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Build Payload",
+        "func": "msg = {};\nmsg.headers = 'Content-Type: application/json';\nmsg.payload = { \n  \"model\": flow.get('modelNumber'),\n  \"deviceType\": \"ROTEA\",\n  \"serialNumber\":  flow.get(\"serialNumber\"),\n  \"deviceName\": flow.get('instrumentName')\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1340,
+        "y": 80,
+        "wires": [
+            [
+                "f9b1da81.48ae08",
+                "bb4fc746.888a68"
+            ]
+        ]
+    },
+    {
+        "id": "fb29f80b.bbcc58",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set protocolName",
+        "func": "\nif(msg.payload !== flow.get('protocolName')){\n flow.set('protocolName',  msg.payload);\n node.send({payload: msg.payload});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1010,
+        "y": 140,
+        "wires": [
+            [
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "6db422.e01cabe",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set protocolState",
+        "func": "if(msg.payload !== flow.get('protocolState')){\n flow.set('protocolState',  msg.payload);\n node.send({payload: msg.payload});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1010,
+        "y": 180,
+        "wires": [
+            [
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "604404a0.8c49bc",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set protocolStepNumber",
+        "func": "\nif(msg.payload !== flow.get('protocolStepNumber')){\n flow.set('protocolStepNumber',  msg.payload);\n node.send({payload: msg.payload});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1030,
+        "y": 220,
+        "wires": [
+            [
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "b0b0b3c2.75d77",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set kitId",
+        "func": "\nif(msg.payload !== flow.get('kitId')){\n flow.set('kitId',  msg.payload);\n node.send({payload: msg.payload});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 980,
+        "y": 480,
+        "wires": [
+            [
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "548bbf04.efc31",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set doorState",
+        "func": "\nif(msg.payload !== flow.get('doorState')){\n flow.set('doorState',  msg.payload);\n node.send({payload: msg.payload});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1000,
+        "y": 440,
+        "wires": [
+            [
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "d1fad4cb.832c58",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "Set kitState",
+        "func": "\nif(msg.payload !== flow.get('kitState')){\n flow.set('kitState',  msg.payload);\n node.send({payload: msg.payload});\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 990,
+        "y": 380,
+        "wires": [
+            [
+                "395a8c0d.768f54"
+            ]
+        ]
+    },
+    {
+        "id": "1c1cfc3e.f34434",
+        "type": "simple-queue",
+        "z": "8a3b0353.1e62a",
+        "name": "",
+        "firstMessageBypass": false,
+        "bypassInterval": "100",
+        "x": 1690,
+        "y": 200,
+        "wires": [
+            [
+                "8ba29c9b.46f52"
+            ]
+        ]
+    },
+    {
+        "id": "8ba29c9b.46f52",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": " last msg to send to API",
+        "func": "var deviceResponse = (msg.statusCode) ? msg : null;\n//node.warn(msg);\nvar statusMsg = (!msg.statusCode && msg.payload && msg.payload.type) === 'ROTEA' ? msg : null; \n//node.warn(statusMsg);\n\n//Update the latest status message\n// If this is the first\nif (statusMsg){\n    flow.set('latestMsg', statusMsg);\n    latestResponse = flow.get('latestResponse');\n    // Frist entry from Queue. API call hasn't happened yet\n    if (!latestResponse){\n        flow.set('latestResponse', {});\n       // node.warn(flow.get('latestMsg'));\n        return flow.get('latestMsg');\n     } else if(flow.get('latestResponse')._queueCount === 0){\n         node.warn('when queue count is 0');\n       //  node.warn(flow.get('latestResponse'));\n       //  setTimeout(()=>{\n             \n      //  node.warn(flow.get('latestMsg'));\n            var payloadObj = flow.get('latestMsg');\n            if(payloadObj && payloadObj.payload && payloadObj.payload.type === 'ROTEA') {\n                return flow.get('latestMsg');\n            }\n        // }, 100);\n     } else {\n         node.warn('when queue count is not 0');\n     }\n}\n\nif (deviceResponse && flow.get('latestMsg')){ \n    flow.set('latestResponse', deviceResponse);\n    \n       // node.warn(flow.get('latestMsg'));\n         payloadObj = flow.get('latestMsg');\n        if(payloadObj && payloadObj.payload && payloadObj.payload.type === 'ROTEA') {\n            return flow.get('latestMsg');\n        }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1900,
+        "y": 200,
+        "wires": [
+            [
+                "219d245.4fd09dc",
+                "8f4d2ed2.de92f"
+            ]
+        ]
+    },
+    {
+        "id": "3e0dd38f.963d9c",
+        "type": "function",
+        "z": "8a3b0353.1e62a",
+        "name": "",
+        "func": "\n        flow.set('latestResponse', null);",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 80,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    }
+]
